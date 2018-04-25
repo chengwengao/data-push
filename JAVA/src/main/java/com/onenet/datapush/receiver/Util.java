@@ -123,7 +123,7 @@ public class Util {
             if (!jsonMsg.has("msg")) {
                 return null;
             }
-            obj.setMsg(jsonMsg.getJSONObject("msg"));
+            obj.setMsg(jsonMsg.get("msg")); //兼容批量数据点处理，msg可能为jsonArray
         }
         return obj;
     }
@@ -168,7 +168,7 @@ public class Util {
         }
 
         public String toString(){
-            return "{ \"msg\":"+this.msg+"，\"nonce\":"+this.nonce+"，\"signature\":"+this.msgSignature+"}";
+            return "{ \"msg\":"+this.msg+",\"nonce\":"+this.nonce+",\"signature\":"+this.msgSignature+"}";
         }
 
     }
