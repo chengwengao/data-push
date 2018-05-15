@@ -39,6 +39,34 @@ public class HttpClientHandle {
     }
 
     /**
+     * get请求,不带请求头
+     * @return
+     */
+    public static String doGet(String url) {
+        try {
+            HttpClient client = new DefaultHttpClient();
+            //发送get请求
+            HttpGet request = new HttpGet(url);
+
+            HttpResponse response = client.execute(request);
+
+            /**请求发送成功，并得到响应**/
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                /**读取服务器返回过来的json字符串数据**/
+                String strResult = EntityUtils.toString(response.getEntity());
+
+                System.out.println(strResult);
+                return strResult;
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * get请求
      * @return
      */
