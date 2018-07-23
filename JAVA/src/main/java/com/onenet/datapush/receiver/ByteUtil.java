@@ -5,14 +5,15 @@ package com.onenet.datapush.receiver;
  */
 public class ByteUtil {
     public static void main(String[] args) {
-        //0080138100000001AAFF
-        byte[] payload = new byte[]{(byte)0x00,(byte)0x80,(byte)0x13,(byte)0x84,(byte)0x00,
-                (byte)0x00,(byte)0x00,(byte)0x01,(byte)0xAA,(byte)0xFF};
+        //0080138100000001AAFF，0080138d00000001AAFF,2580138d00000000aaff
+//        byte[] payload = new byte[]{(byte)0x25,(byte)0x80,(byte)0x13,(byte)0x8d,(byte)0x00,
+//                (byte)0x00,(byte)0x00,(byte)0x00,(byte)0xAA,(byte)0xFF};
+        String payload = "0080138000000001AAFF";
         getDevCommand(payload);
     }
 
     public static String getDevCommand(String payload){
-        byte[] bb = Base16Encoder.decode(payload);
+        byte[] bb = hexStringToBytes(payload);
         return getDevCommand(bb);
     }
 
@@ -30,6 +31,35 @@ public class ByteUtil {
         return sb.toString();
 
 
+    }
+
+    /**
+     * Convert hex string to byte[]
+     * @param hexString the hex string
+     * @return byte[]
+     */
+    public static byte[] hexStringToBytes(String hexString) {
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase();
+        int length = hexString.length() / 2;
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        for (int i = 0; i < length; i++) {
+            int pos = i * 2;
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+
+    /**
+     * Convert char to byte
+     * @param c char
+     * @return byte
+     */
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
     }
 
     public static int getBit(int n, int k) {
